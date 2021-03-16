@@ -12,6 +12,7 @@ largely mainstream sources referenced by alternative media. The BuckyStats datab
 for designing a database and creating a mobile-friendly user interface to fill it.
 
 # Table of Contents
+* [Stats People](#stats)
 * [Requirements](#requirements)
 * [Getting Started](#getting-started)
 * [Documentation](#documentation)
@@ -20,11 +21,17 @@ for designing a database and creating a mobile-friendly user interface to fill i
 * [Contribution Guidelines](#contribution-guidelines)
 
 
+# <a name="stats"></a>Stats People
+
+If your interest in the code base is to check the calculation algorithms, they can all be found in the <a href="https://github.com/rockhopsoft/buckystats/tree/main/src/Controllers" target="_blank">/src/Controllers directory</a>. Specifically, the php files which start with "DatasetsComiple" are where most of those calculation scripts currently live.
+
+
 # <a name="requirements"></a>Requirements
 
 * php: >=7.4
 * <a href="https://packagist.org/packages/laravel/framework" target="_blank">laravel/framework</a>: 8.5.*
 * <a href="https://packagist.org/packages/rockhopsoft/survloop" target="_blank">rockhopsoft/survloop</a>: 0.*
+* <a href="https://packagist.org/packages/rockhopsoft/buckystats-website" target="_blank">rockhopsoft/buckystats-website</a>: 0.*
 
 # <a name="getting-started"></a>Getting Started
 
