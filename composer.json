@@ -1,0 +1,39 @@
+{
+    "name": "rockhopsoft/buckystats",
+    "description": "Bucky Stats - Data Graphs for Co-Pilots of Spaceship Earth — Tracking some data points of a world whose organization is far too dominated by earlier grunches of giants. Inspired by Buckminster Fuller's ideas of immense data dashboards used to inform world leaders. If our governments are truly representative, then we all need powerful access to actionable data for evidence-based decisions.",
+    "keywords": [
+        "Bucky Stats",
+        "Morgan Lesko",
+        "Wiki World Order",
+        "Rockhopper Software Designs",
+        "Buckminster Fuller",
+        "datasets",
+        "statistics",
+        "charts",
+        "graphs",
+        "public health",
+        "economics",
+        "United States",
+        "spaceship earth",
+        "Survloop",
+        "laravel"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Morgan Lesko",
+            "homepage": "https://github.com/rockhopsoft/buckystats",
+            "email": "rockhoppers@runbox.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "rockhopsoft/survloop": "*@dev",
+        "rockhopsoft/buckystats-website": "*@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "RockHopSoft\\BuckyStats\\": "src/"
+        }
+    }
+}
