@@ -11,12 +11,7 @@
     ]
 )->render() !!}
 <h2>Every Jurisdiction</h2>
-<h4 class="slBlueDark">
-@foreach ($reqDataSlugs as $i => $dataSlug)
-    {{ $dataTypes->getDataPointTitle($dataSlug)
-        . (($i < sizeof($reqDataSlugs)-1) ? ', ' : '') }}
-@endforeach
-</h4>
+<h4 class="slBlueDark">{!! $GLOBALS["SL"]->getSwapTxt('Filter Data Full') !!}</h4>
 <p><br/></p>
 
 {!! view(
@@ -28,7 +23,7 @@
     ]
 )->render() !!}
 
-{!! $GLOBALS["CUST"]->printSources(['covid'], $timescale) !!}
+{!! $GLOBALS["CUST"]->printSources($reqDataSlugs, $timescale) !!}
 
 {!! view('vendor.buckystats.inc-back-to-top')->render() !!}
 

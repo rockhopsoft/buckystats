@@ -22,6 +22,7 @@ class BuckyDatasetInterface extends BuckyDatasetInterfaceDataTypes
         $this->checkReportRedir();
         $this->getAllDataSlugsToGraph();
         $this->loadShareURLs();
+        $this->loadMetaInfo();
     }
 
     protected function initDatasetGraph($title = '', $axisTitleX = '')
@@ -210,6 +211,43 @@ class BuckyDatasetInterface extends BuckyDatasetInterfaceDataTypes
         $GLOBALS["SL"]->x["share-embed"] = '&lt;iframe src="' . $url . 'frame=1" '
             . 'frameborder="0" scrolling="no" width="100%" height="550"&gt;&lt;/iframe&gt;';
     }
+
+    protected function loadMetaInfo()
+    {
+        $keys = [];
+        $fltState = $fltDataFull = '';
+        if (sizeof($this->v["states"]) == 1) {
+            $fltState = $this->v["stateName"];
+            $keys[] = $this->v["stateName"];
+        } else {
+            $fltState = implode(', ', $this->v["states"]);
+            foreach ($this->v["states"] as $abbr) {
+                $keys[] = $this->getStateName($abbr);
+            }
+        }
+        foreach ($this->v["reqDataSlugs"] as $i => $dataSlug) {
+            $dataTitle = $this->v["dataTypes"]->getDataPointTitle($dataSlug);
+            $fltDataFull .= (($i > 0) ? ', ' : '') . $dataTitle;
+            if (sizeof($keys) < 15) {
+                $keys[] = $dataTitle;
+            }
+        }
+        $fltData = $fltDataFull;
+        if (strlen($fltDataFull) > 40) {
+            $spacePos = strpos($fltDataFull, ' ', 40);
+            $fltData = substr($fltDataFull, 0, $spacePos) . ' ... ';
+        }
+        if (sizeof($this->v["reqDataSlugs"]) == 0) {
+            $keys[] = 'public health';
+            $keys[] = 'economics';
+            $keys[] = 'COVID-19';
+        }
+        $GLOBALS["SL"]->setSwapTxt('Filter State',     $fltState);
+        $GLOBALS["SL"]->setSwapTxt('Filter Data Full', $fltDataFull);
+        $GLOBALS["SL"]->setSwapTxt('Filter Data',      $fltData);
+        $GLOBALS["SL"]->setSwapTxt('Filter Keywords',  implode(', ', $keys));
+    }
+
 
     protected function addRangeToTitle()
     {
@@ -742,7 +780,7 @@ class BuckyDatasetInterface extends BuckyDatasetInterfaceDataTypes
 
     protected function getGraphLinkText()
     {
-        return 'Change This Graph\'s Datasets';
+        return 'Customize This Graph';
     }
 
     protected function getGraphLinkIcon()
@@ -780,9 +818,8 @@ class BuckyDatasetInterface extends BuckyDatasetInterfaceDataTypes
     public function wwdGraphDesc($datasetID = 0)
     {
         $data = [];
-        if ($GLOBALS["SL"]->REQ->has('data')
-            && strpos($GLOBALS["SL"]->REQ->has('data'), 'covid') !== false) {
-            $data[] = 'covid';
+        if ($GLOBALS["SL"]->REQ->has('data')) {
+            $data[] = $GLOBALS["SL"]->mexplode(',', $GLOBALS["SL"]->REQ->get('data'));
         }
         return $GLOBALS["CUST"]->printSources($data);
         /*

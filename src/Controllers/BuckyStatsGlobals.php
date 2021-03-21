@@ -23,7 +23,7 @@ class BuckyStatsGlobals
 
     public $weeklyAvgYearUS = 20152019;
 
-    public function printSources($data = ['covid'], $timescale = 'years')
+    public function printSources($data = [], $timescale = 'years')
     {
         return view(
             'vendor.buckystats.inc-report-sources',
@@ -175,6 +175,182 @@ class BuckyStatsGlobals
         }
         return ' setTimeout(function() { console.log("' . $url . '"); '
             . '$("#graph' . $id . '").load("' . $url . '"); }, ' . $delay . '); ';
+    }
+
+    public function hasDataSourceCat($cat = '', $data = [])
+    {
+        if (sizeof($data) == 0) {
+            return true;
+        }
+        if (in_array($cat, ['pop', 'mort'])) {
+            return ($this->hasDataSource('raw-pop', $data)
+                || $this->hasDataSource('std-pop', $data)
+                || $this->hasDataSource('raw-mort', $data)
+                || $this->hasDataSource('std-mort', $data)
+                || $this->hasDataSource('life-expect', $data));
+        } elseif ($cat == 'covid') {
+            return $this->hasDataSource('covid', $data);
+        } elseif ($cat == 'econ') {
+            return ($this->hasDataSource('unemploy', $data)
+                || $this->hasDataSource('cpi-u', $data)
+                || $this->hasDataSource('r-cpi-u-rs', $data)
+                || $this->hasDataSource('debt-govt', $data));
+        }
+        return true;
+    }
+
+    public function hasDataSource($group = '', $data = [])
+    {
+        if (sizeof($data) == 0) {
+            return true;
+        }
+        $typeList = $this->getSourceDataTypes($group);
+        if (sizeof($typeList) > 0) {
+            foreach ($typeList as $type) {
+                if (in_array($type, $data)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function getSourceDataTypes($group)
+    {
+        if ($group == 'raw-pop') {
+            return [ 'raw-pop' ];
+
+        } elseif ($group == 'std-pop') {
+            return $this->getSourceDataTypesStdPop();
+
+        } elseif ($group == 'raw-mort') {
+            return $this->getSourceDataTypesRawMort();
+
+        } elseif ($group == 'std-mort') {
+            return $this->getSourceDataTypesStdMort();
+
+        } elseif ($group == 'life-expect') {
+            return $this->getSourceDataTypesLifeExpect();
+
+        } elseif ($group == 'covid') {
+            return $this->getSourceDataTypesCovidResponse();
+
+        } elseif ($group == 'unemploy') {
+            return [ 'unemployment-rate' ];
+
+        } elseif ($group == 'cpi-u') {
+            return [ 'cpi-u' ];
+
+        } elseif ($group == 'r-cpi-u-rs') {
+            return [ 'r-cpi-u-rs' ];
+
+        } elseif ($group == 'debt-govt') {
+            return [ 'debt-govt', 'debt-govt-per-capita', 'debt-govt-per-capita-avg-5yr' ];
+        }
+    }
+
+    public function getSourceDataTypesStdPop()
+    {
+        return [
+            'pop-by-age-group',
+            'pop-by-age-24',
+            'pop-by-age-25-44',
+            'pop-by-age-45-64',
+            'pop-by-age-65-74',
+            'pop-by-age-75-84',
+            'pop-by-age-85',
+            'pop-by-age-75',
+            'pop-by-age-65',
+            'pop-by-age-45',
+            'pop-by-age-44',
+        ];
+    }
+
+    public function getSourceDataTypesRawMort()
+    {
+        return [
+            'raw-mort',
+            'avg-raw-mort',
+            'avg-mort-perc-all-ages',
+            'diff-mort',
+            'diff-mort-perc',
+            'mort-perc-all-ages-avg-5yr'
+        ];
+    }
+
+    public function getSourceDataTypesStdMort()
+    {
+        return [
+            'mort-by-age-group',
+            'mort-by-age-24',
+            'mort-by-age-25-44',
+            'mort-by-age-45-64',
+            'mort-by-age-65-74',
+            'mort-by-age-75-84',
+            'mort-by-age-85',
+            'avg-mort-by-age-group',
+            'avg-mort-by-age-24',
+            'avg-mort-by-age-25-44',
+            'avg-mort-by-age-45-64',
+            'avg-mort-by-age-65-74',
+            'avg-mort-by-age-75-84',
+            'avg-mort-by-age-85',
+            'mort-perc-all-ages',
+            'mort-perc-by-age-group',
+            'mort-perc-by-age-24',
+            'mort-perc-by-age-25-44',
+            'mort-perc-by-age-45-64',
+            'mort-perc-by-age-65-74',
+            'mort-perc-by-age-75-84',
+            'mort-perc-by-age-85',
+            'mort-perc-by-age-75',
+            'mort-perc-by-age-65',
+            'mort-perc-by-age-45',
+            'mort-perc-by-age-44',
+            'avg-mort-perc-by-age-group',
+            'avg-mort-perc-by-age-24',
+            'avg-mort-perc-by-age-25-44',
+            'avg-mort-perc-by-age-45-64',
+            'avg-mort-perc-by-age-65-74',
+            'avg-mort-perc-by-age-75-84',
+            'avg-mort-perc-by-age-85',
+            'avg-mort-perc-by-age-75',
+            'avg-mort-perc-by-age-65',
+            'avg-mort-perc-by-age-45',
+            'avg-mort-perc-by-age-44',
+            'standardized-by-age-us',
+            'avg-standardized-by-age-us',
+            'diff-mort-standardized-by-age-us',
+            'standardized-by-age-us-avg-5yr'
+        ];
+    }
+
+    public function getSourceDataTypesLifeExpect()
+    {
+        return [
+            'life-expect-birth',
+            'life-expect-65',
+            'life-expect-75',
+            'life-expect-birth-avg-5yr',
+            'life-expect-65-avg-5yr',
+            'life-expect-75-avg-5yr'
+        ];
+    }
+
+    public function getSourceDataTypesCovidResponse()
+    {
+        return [
+            'covid-all-avg',
+            'covid-overall-avg',
+            'covid-containment-avg',
+            'covid-stringency-avg',
+            'covid-economic-avg',
+            'covid-all-max',
+            'covid-overall-max',
+            'covid-containment-max',
+            'covid-stringency-max',
+            'covid-economic-max'
+        ];
     }
 
 }

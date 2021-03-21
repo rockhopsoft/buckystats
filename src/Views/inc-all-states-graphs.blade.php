@@ -16,8 +16,6 @@
     <p><br /></p>
 @endforeach
 
-{!! view('vendor.buckystats.inc-back-to-top')->render() !!}
-
 <script type="text/javascript"> $(document).ready(function(){
 
 setTimeout(function() {
@@ -32,7 +30,7 @@ $("#graphUScovid").load("/one/US/{{ $timescale }}?data={{ $data }}&ajax=1");
         setTimeout(function() {
         console.log("/one/US/{{ $abbr }}/{{ $timescale }}?data={{ $data }}&ajax=1");
         $("#graph{{ $abbr }}").load("/one/US/{{ $abbr }}/{{ $timescale }}?data={{ $data }}&ajax=1");
-        }, {{ ($cnt*250) }});
+        }, {{ ($cnt*500) }});
     @endif
 @endforeach
 

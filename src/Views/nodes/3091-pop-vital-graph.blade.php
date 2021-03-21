@@ -11,7 +11,8 @@
     ]
 )->render() !!}
 
-<div id="wrap{{ $rand }}" class="container mB15">
+<div id="wrap{{ $rand }}" class="container mB15"
+    style="padding-left: 0px; padding-right: 0px;">
     {!! $graph->print($rand) !!}
 </div>
 
@@ -35,7 +36,7 @@
     </div>
 </div>
 
-{!! $GLOBALS["CUST"]->printSources() !!}
+{!! $GLOBALS["CUST"]->printSources($reqDataSlugs) !!}
 
 {!! view('vendor.buckystats.inc-back-to-top')->render() !!}
 

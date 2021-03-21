@@ -1,6 +1,10 @@
 <?php
 namespace RockHopSoft\BuckyStats\Controllers;
 
+use DB;
+use App\Models\BSMortDailyUs;
+use App\Models\BSMortWeeklyUs;
+use App\Models\BSPopulationUs;
 use App\Models\BSGeographicAreas;
 use App\Models\BSYearWeekEndDates;
 
@@ -217,6 +221,69 @@ class DatasetsLookups
         return intVal($this->getWeekEndDateMonthStr($year, $week));
     }
 
+    protected function storeMonthDataForDays($year, $month, $dataFld, $val)
+    {
+        $dailyFld = 'mrt_day_us_' . $dataFld;
+        $dateMatch = $year . '-' . (($month < 10) ? '0' : '') . $month . '-%';
+        BSMortDailyUs::where('mrt_day_us_state', 'United States')
+            ->where('mrt_day_us_date', 'LIKE', $dateMatch)
+            ->update([ $dailyFld => $val ]);
+    }
+
+    protected function compileMonthlyDataRows($table, $prefix, $dataFld, $div = 1, $year1 = -1)
+    {
+        $yearFld = $prefix . 'year';
+        if ($div == 0) {
+            $div = 1;
+        }
+        $monthlies = DB::table($table)
+            ->orderBy($yearFld, 'asc')
+            ->get();
+        if ($monthlies->isNotEmpty()) {
+            if ($year1 <= 0) {
+                $year1 = intVal($monthlies[0]->{ $yearFld });
+            }
+            $years = $months = [];
+            for ($year = $year1; $year <= 2020; $year++) {
+                $years[$year]  = 0;
+                $months[$year] = [];
+            }
+            foreach ($monthlies as $i => $row) {
+                $year = intVal($row->{ $yearFld });
+                if ($year >= $year1 && $year <= 2020) {
+                    for ($month = 1; $month <= 12; $month++) {
+                        $val = ($row->{ $prefix . $month }/$div);
+                        $months[$year][$month] = $val;
+                        $years[$year] += $val;
+                        if ($year == 2020) {
+                            $this->storeMonthDataForDays($year, $month, $dataFld, $val);
+                        }
+                    }
+                }
+            }
+        }
+        for ($year = $year1; $year <= 2020; $year++) {
+            $years[$year] = $years[$year]/12;
+            BSPopulationUs::where('us_pop_state', 'United States')
+                ->where('us_pop_year', $year)
+                ->update([ ('us_pop_' . $dataFld) => $years[$year] ]);
+        }
+        $weeklyFld = 'mrt_week_us_' . $dataFld;
+        $chk = BSMortWeeklyUs::where('mrt_week_us_state', 'United States')
+            ->where('mrt_week_us_year', '<=', 2020)
+            ->get();
+        if ($chk->isNotEmpty()) {
+            foreach ($chk as $week) {
+                $year = intVal($week->mrt_week_us_year);
+                $month = $this->getWeekEndDateMonth($year, $week->mrt_week_us_week);
+                $week->{ $weeklyFld } = null;
+                if ($month >= 1 && $month <= 12) {
+                    $week->{ $weeklyFld } = $months[$year][$month];
+                }
+                $week->save();
+            }
+        }
+    }
 
 }
 

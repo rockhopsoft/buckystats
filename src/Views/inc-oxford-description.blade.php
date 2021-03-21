@@ -21,7 +21,10 @@ data into a single number. Each of these indices report a number between 0 to 10
 reflects the level of the governments response along certain dimensions. This is a measure
 of how many of the relevant indicators a government has acted upon, and to what degree.
 The index cannot say whether a government's policy has been implemented effectively."
-</p><p>
+</p>
+{!! view('vendor.buckystats.inc-desc-covid-oxford-indexes')->render() !!}
+
+<p>
 Bucky Stats last imported the OxCGRT data on March 1, 2020.
 (I do hope to automate regular updates in the future.)
 Juxtaposed data lines based on all-cause mortality are from the weekly CDC datasets

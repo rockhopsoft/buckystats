@@ -56,7 +56,7 @@ class BuckyDatasetInterfaceDataTypes extends DatasetsLookups
         $this->v["dataTypes"]->addNewGroup('Oxford Covid-19 Government Response Tracker (OxCGRT)');
         $this->loadDataTypesYearsCovid($timescale);
 
-        $this->v["dataTypes"]->addNewGroup('Economic Statistics');
+        $this->v["dataTypes"]->addNewGroup('United States Economic Statistics');
         $this->loadDataTypesEcon();
 
         $this->v["dataTypes"]->addNewGroup('Increases Over 5-Year Averages');
@@ -269,9 +269,21 @@ class BuckyDatasetInterfaceDataTypes extends DatasetsLookups
     protected function loadDataTypesEcon($titlePre = '', $slugPre = '')
     {
         $unit = 'Percent';
-        $title = $titlePre . 'U.S. Average Unemployment Rate';
+        $title = $titlePre . 'Average Unemployment Rate';
         $flds = [ 'us_pop_unemployment_rate' ];
         $this->v["dataTypes"]->addType($slugPre . 'unemployment-rate', $title, $unit, $flds);
+        $this->v["dataTypes"]->setAxisMinY();
+
+        $unit = 'Index';
+        $title = $titlePre . 'Consumer Price Index (CPI-U)';
+        $flds = [ 'us_pop_cpi_u' ];
+        $this->v["dataTypes"]->addType($slugPre . 'r-cpi-u', $title, $unit, $flds);
+        $this->v["dataTypes"]->setAxisMinY();
+
+        $unit = 'Index';
+        $title = $titlePre . 'Consumer Price Index Retroactive Series (R-CPI-U-RS)';
+        $flds = [ 'us_pop_cpi_u_rs' ];
+        $this->v["dataTypes"]->addType($slugPre . 'r-cpi-u-rs', $title, $unit, $flds);
         $this->v["dataTypes"]->setAxisMinY();
 
         $unit = 'Trillions of U.S. Dollars';

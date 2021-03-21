@@ -51,7 +51,7 @@ class BuckyDatasetVitalSingleUS extends BuckyDatasetInterface
 
     protected function getGraphLinkText()
     {
-        return $this->getGraphLinkIcon() . 'Add More To This Graph';
+        return $this->getGraphLinkIcon() . 'Customize This Graph';
     }
 
     protected function wwdGraphAddLineYears($stateName, $dataSlug)

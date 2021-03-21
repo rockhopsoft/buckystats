@@ -16,7 +16,22 @@ class DatasetsCompileEconYearly extends DatasetsCompilePopDistributions
     public function runCompileEconDebtYearlyUS()
     {
         $this->runCompileEconDebtUS();
-        $this->runCompileEconUnemploymentUS();
+
+        $table   = 'bs_labor_monthly_us';
+        $prefix  = 'lab_mon_us_';
+        $dataFld = 'unemployment_rate';
+        $this->compileMonthlyDataRows($table, $prefix, $dataFld, 100);
+
+        $table   = 'bs_us_cpi_u';
+        $prefix  = 'cpi_u_';
+        $dataFld = 'cpi_u';
+        $this->compileMonthlyDataRows($table, $prefix, $dataFld);
+
+        $table   = 'bs_us_cpi_u_rs';
+        $prefix  = 'cpi_urs_';
+        $dataFld = 'cpi_u_rs';
+        $this->compileMonthlyDataRows($table, $prefix, $dataFld, 1, 1978);
+
         echo 'Finished Compiling Economic stats';
         exit;
     }
@@ -43,53 +58,5 @@ class DatasetsCompileEconYearly extends DatasetsCompilePopDistributions
         }
     }
 
-    private function runCompileEconUnemploymentUS()
-    {
-        $years = $months = [];
-        for ($year = 1948; $year <= 2020; $year++) {
-            $years[$year]  = 0;
-            $months[$year] = [];
-        }
-        $unemploy = BSLaborMonthlyUs::orderBy('lab_mon_us_year', 'asc')
-            ->get();
-        if ($unemploy->isNotEmpty()) {
-            foreach ($unemploy as $e => $unemp) {
-                $year = intVal($unemp->lab_mon_us_year);
-                if ($year <= 2020) {
-                    for ($month = 1; $month <= 12; $month++) {
-                        $rate = ($unemp->{ 'lab_mon_us_' . $month }/100);
-                        $months[$year][$month] = $rate;
-                        $years[$year] += $rate;
-                        if ($year >= 2015) {
-                            $dateMatch = $year . '-' . (($month < 10) ? '0' : '') . $month . '-%';
-                            BSMortDailyUs::where('mrt_day_us_state', 'United States')
-                                ->where('mrt_day_us_date', 'LIKE', $dateMatch)
-                                ->update([ 'mrt_day_us_unemployment_rate' => $months[$year][$month] ]);
-                        }
-                    }
-                }
-            }
-        }
-        for ($year = 1948; $year <= 2020; $year++) {
-            $years[$year] = $years[$year]/12;
-            BSPopulationUs::where('us_pop_state', 'United States')
-                ->where('us_pop_year', $year)
-                ->update([ 'us_pop_unemployment_rate' => $years[$year] ]);
-        }
-        $chk = BSMortWeeklyUs::where('mrt_week_us_state', 'United States')
-            ->where('mrt_week_us_year', '<=', 2020)
-            ->get();
-        if ($chk->isNotEmpty()) {
-            foreach ($chk as $week) {
-                $year = intVal($week->mrt_week_us_year);
-                $month = $this->getWeekEndDateMonth($year, $week->mrt_week_us_week);
-                $week->mrt_week_us_unemployment_rate = null;
-                if ($month >= 1 && $month <= 12) {
-                    $week->mrt_week_us_unemployment_rate = $months[$year][$month];
-                }
-                $week->save();
-            }
-        }
-    }
 
 }

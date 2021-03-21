@@ -2,11 +2,11 @@
 
 <div class="pT15 pB5">
     <a id="hidivBtnGraphCustomize" href="javascript:;"
-        class="hidivBtn btn btn-secondary btn-sm"
+        class="fL hidivBtn btn btn-secondary btn-sm mR15"
         ><i class="fa fa-sliders mR3" aria-hidden="true"></i>
         Customize @if ($embed) Graph @else Graphs @endif</a>
     <a id="hidivBtnGraphShare" href="javascript:;"
-        class="hidivBtn btn btn-secondary btn-sm"
+        class="fL hidivBtn btn btn-secondary btn-sm mR15"
         ><i class="fa fa-share-alt mR3" aria-hidden="true"></i>
         Share @if ($embed) Graph @else Graphs @endif</a>
     <div class="fC"></div>
@@ -14,16 +14,17 @@
 
 <div id="hidivGraphShare" class="disNon row2 p30 mB5">
     <div id="copyConfirmation" class="pull-right disNon"></div>
-    <h3 class="mTn5 slBlueDark">
+    <h4 class="mTn5 slBlueDark">
         <i class="fa fa-share-alt mR3" aria-hidden="true"></i>
         Share @if ($embed) Graph @else Graphs @endif
-    </h3>
+    </h4>
     <div class="row mT15">
         <div class="col-md-1">
             <h5 class="mT5">Link</h5>
         </div>
         <div class="col-md-9">
-            <input type="text" id="copyGraphLinkHtml" class="form-control"
+            <input type="text" id="copyGraphLinkHtml"
+                class="form-control @if (!$GLOBALS['SL']->isMobile()) form-control-lg @endif "
                 value="{{ $GLOBALS['SL']->x['share-url'] }}">
         </div>
         <div class="col-md-2">
@@ -52,14 +53,14 @@
 
 <div id="hidivGraphCustomize" class="disNon row2 mB5">
     <div class="p30">
-        <h3 class="mTn5 slBlueDark">
+        <h4 class="mTn5 slBlueDark">
             <i class="fa fa-sliders mR3" aria-hidden="true"></i>
             Customize @if ($embed) Graph @else Graphs @endif
-        </h3>
-        <div class="row">
+        </h4>
+        <div class="row mT15">
             <div class="col-md-3">
-                <select id="popGraphStateID" name="popGraphState"
-                    class="form-control form-control-lg mB10" autocomplete="off"
+                <select id="popGraphStateID" name="popGraphState" autocomplete="off"
+                    class="form-control @if (!$GLOBALS['SL']->isMobile()) form-control-lg @endif mB10"
                     onChange=" selectTag('1', this.value); this.value='';">
                     <option value="" SELECTED >Select state to add...</option>
                     {!! str_replace('<option value=""', '<option value="US"',
@@ -76,8 +77,8 @@
                     data-nid="1" type="hidden" value=",">
             </div>
             <div class="col-md-6">
-                <select id="popGraphGroupsID" name="popGraphGroups"
-                    class="form-control form-control-lg mB10" autocomplete="off"
+                <select id="popGraphGroupsID" name="popGraphGroups" autocomplete="off"
+                    class="form-control @if (!$GLOBALS['SL']->isMobile()) form-control-lg @endif mB10"
                     onChange="selectTag('2', this.value); this.value='';">
                     <option value="" SELECTED >Select data point to add...</option>
                     {!! str_replace('SELECTED', '',
@@ -88,8 +89,8 @@
                     data-nid="2" type="hidden" value=",">
             </div>
             <div class="col-md-3">
-                <select id="popGraphTimescaleID" name="popGraphTimescale"
-                    class="form-control form-control-lg mB10" autocomplete="off">
+                <select id="popGraphTimescaleID" name="popGraphTimescale" autocomplete="off"
+                    class="form-control @if (!$GLOBALS['SL']->isMobile()) form-control-lg @endif mB10">
                     <option value="years"
                         @if ($timescale == 'years') SELECTED @endif
                         >Yearly Data</option>

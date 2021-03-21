@@ -35,7 +35,7 @@ class BuckyDatasetCompareDataLines extends BuckyDatasetInterface
                         $url = $embedUrl . $type->slug;
                         $this->v["charts"][$g][1][] = [
                             $type->title,
-                            new BuckyEmbed($cnt, $url, ($cnt*1000))
+                            new BuckyEmbed($cnt, $url, ($cnt*500))
                         ];
                     }
                 }

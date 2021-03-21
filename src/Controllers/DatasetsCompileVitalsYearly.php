@@ -640,7 +640,9 @@ class DatasetsCompileVitalsYearly extends DatasetsCompilePopDistributions
             'us_pop_debt_outstanding_amount',
             'us_pop_debt_outstanding_per_capita',
             'us_pop_debt_outstanding_per_capita_avg_inc',
-            'us_pop_unemployment_rate'
+            'us_pop_unemployment_rate',
+            'us_pop_cpi_u',
+            'us_pop_cpi_u_rs'
         ];
     }
 

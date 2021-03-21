@@ -142,7 +142,7 @@ class ReportCovidResponses extends DatasetsLookups
 
     private function checkCovidExports()
     {
-        $file = "COVID-Response-US-States-Annual_Average_of_Daily_Indexes";
+        $file = "COVID-Response-US-States-Annual_Average_of_Daily_Indices";
         if ($GLOBALS["SL"]->REQ->has('excel')) {
             $this->v["covidTblUS"]->excel($file . '.xls');
         }

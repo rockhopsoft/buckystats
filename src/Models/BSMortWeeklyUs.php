@@ -48,6 +48,8 @@ class BSMortWeeklyUs extends Model
         'mrt_week_us_oxf_economic_support_max',
 
         'mrt_week_us_unemployment_rate',
+        'mrt_week_us_cpi_u',
+        'mrt_week_us_cpi_u_rs',
     ];
 
     // END Survloop auto-generated portion of Model

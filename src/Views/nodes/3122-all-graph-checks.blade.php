@@ -35,7 +35,7 @@
     @endforeach
 @endforeach
 
-{!! $GLOBALS["CUST"]->printSources() !!}
+{!! $GLOBALS["CUST"]->printSources($reqDataSlugs) !!}
 
 {!! view('vendor.buckystats.inc-back-to-top')->render() !!}
 

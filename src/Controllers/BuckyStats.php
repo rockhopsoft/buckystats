@@ -151,31 +151,34 @@ class BuckyStats extends BuckyStatsInit
     {
         $this->v["bigList"] = $this->getAllGraphBulletList();
         $this->v["custReps"] = $this->getCustReportBulletList();
-        $this->v["charts"]  = [];
+        $this->v["charts"] = [];
 
         $url = '/multi/US/years?states=,US,MD,&data=mort-perc-all-ages';
-        $this->v["charts"][] = new BuckyEmbed(1, $url, 500);
+        $this->v["charts"][] = new BuckyEmbed(1, $url, 200);
 
         $url = '/one/US/years?data=life-expect-birth,life-expect-65,life-expect-75';
-        $this->v["charts"][] = new BuckyEmbed(2, $url, 1000);
+        $this->v["charts"][] = new BuckyEmbed(2, $url, 400);
 
         $url = '/multi/US/years?states=,US,CA,TX,FL,NY,PA,IL,OH,GA,&data=standardized-by-age-us';
-        $this->v["charts"][] = new BuckyEmbed(3, $url, 2000);
+        $this->v["charts"][] = new BuckyEmbed(3, $url, 600);
 
         $url = '/multi/US/years?states=,US,CA,TX,FL,NY,PA,IL,OH,GA,&data=standardized-by-age-us-avg-5yr';
-        $this->v["charts"][] = new BuckyEmbed(4, $url, 3000);
+        $this->v["charts"][] = new BuckyEmbed(4, $url, 800);
 
         $url = '/one/US/years?data=unemployment-rate,debt-govt-per-capita';
-        $this->v["charts"][] = new BuckyEmbed(5, $url, 4000);
+        $this->v["charts"][] = new BuckyEmbed(5, $url, 1000);
+
+        $url = '/one/US/years?data=r-cpi-u,r-cpi-u-rs';
+        $this->v["charts"][] = new BuckyEmbed(6, $url, 1200);
 
         $url = '/one/US/days?data=standardized-by-age-us,avg-standardized-by-age-us,covid-all-avg';
-        $this->v["charts"][] = new BuckyEmbed(6, $url, 5000);
+        $this->v["charts"][] = new BuckyEmbed(7, $url, 1400);
 
         $url = '/one/US/MD/days?data=standardized-by-age-us,avg-standardized-by-age-us,covid-all-avg';
-        $this->v["charts"][] = new BuckyEmbed(7, $url, 6000);
+        $this->v["charts"][] = new BuckyEmbed(8, $url, 1600);
 
         $url = '/one/US/FL/days?data=standardized-by-age-us,avg-standardized-by-age-us,covid-all-avg';
-        $this->v["charts"][] = new BuckyEmbed(8, $url, 7000);
+        $this->v["charts"][] = new BuckyEmbed(9, $url, 1800);
 
         return view(
             'vendor.buckystats.nodes.3100-home-page',
@@ -200,7 +203,8 @@ class BuckyStats extends BuckyStatsInit
         $url = '/one/US/years?data=perc-by-age-group';
         $charts[] = new BuckyEmbed(4, $url, 3000);
 
-        $url = '/multi/US/years?states=,US,CA,TX,FL,NY,PA,IL,OH,GA,NC,MI,NJ,VA,WA,AZ,MA,&data=standardized-by-age-us';
+        $url = '/multi/US/years?states=,US,CA,TX,FL,NY,PA,IL,OH,GA,NC,MI,NJ,VA,WA,AZ,MA,'
+            . '&data=standardized-by-age-us';
         $charts[] = new BuckyEmbed(5, $url, 4000);
 
         return view(
@@ -210,6 +214,23 @@ class BuckyStats extends BuckyStatsInit
     }
 
 
+    public function sendEmailBlurbsCustom($emailBody, $recID = 0)
+    {
+        $dynamos = [
+            '[{ Filter State }]',
+            '[{ Filter Data Full }]',
+            '[{ Filter Data }]',
+            '[{ Filter Keywords }]'
+        ];
+        foreach ($dynamos as $dy) {
+            if (strpos($emailBody, $dy) !== false) {
+                $dyCore = trim(str_replace('[{', '', str_replace('}]', '', $dy)));
+                $swap = $GLOBALS["SL"]->getSwapTxt($dyCore);
+                $emailBody = str_replace($dy, $swap, $emailBody);
+            }
+        }
+        return $emailBody;
+    }
 
 }
 

@@ -44,6 +44,8 @@ class BSMortDailyUs extends Model
         'mrt_day_us_oxf_economic_support',
 
         'mrt_day_us_unemployment_rate',
+        'mrt_day_us_cpi_u',
+        'mrt_day_us_cpi_u_rs',
     ];
 
     // END Survloop auto-generated portion of Model

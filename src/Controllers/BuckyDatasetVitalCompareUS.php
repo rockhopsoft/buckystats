@@ -58,7 +58,7 @@ class BuckyDatasetVitalCompareUS extends BuckyDatasetVitalSingleUS
 
     protected function getGraphLinkText()
     {
-        return $this->getGraphLinkIcon() . 'Add More To This Graph';
+        return $this->getGraphLinkIcon() . 'Customize This Graph';
     }
 
     private function wwdGraphCompareAddLineYears($stateName, $dataSlug)

@@ -97,7 +97,6 @@ class BuckyStatsInit extends TreeSurvForm
                     $ret = $this->getGraphPageVitalMultiGraph();
                 }
                 $GLOBALS["SL"]->putCache($url, $ret, 'page-html', 1);
-                exit;
             } else {
                 $ret = $this->index($request);
                 $GLOBALS["SL"]->putCache($url, $ret, 'page-html', 1);
